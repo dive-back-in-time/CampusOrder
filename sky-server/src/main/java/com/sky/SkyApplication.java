@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Slf4j
 public class SkyApplication {
     public static void main(String[] args) {
+        System.out.println("当前线程：" + Thread.currentThread().getName());
         SpringApplication.run(SkyApplication.class, args);
         log.info("server started");
     }
 }
+
+
