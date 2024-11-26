@@ -46,4 +46,19 @@ public interface DishMapper {
      */
     @Delete("delete from dish where id = #{id}")
     void deleteById(Long id);
+
+    /**
+     * 根据id查询菜品和对应口味
+     * @param id
+     * @return
+     */
+    @Select("select * from dish where id = #{id}")
+    DishVO getByIdFlavor(Long id);
+
+    /**
+     * 修改菜品信息
+     * @param dish
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
 }
