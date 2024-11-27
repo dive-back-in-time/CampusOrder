@@ -43,7 +43,7 @@ public class EmployeeController {
     @PostMapping("/login")
     @ApiOperation(value = "员工登录")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
-        log.info("员工登录：{}", employeeLoginDTO);
+//        log.info("员工登录：{}", employeeLoginDTO);
 
         Employee employee = employeeService.login(employeeLoginDTO);
 
@@ -88,7 +88,7 @@ public class EmployeeController {
     @GetMapping("/page")
     @ApiOperation("分页查询")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
-        log.info("员工分页查询，参数为：{}", employeePageQueryDTO);
+//        log.info("员工分页查询，参数为：{}", employeePageQueryDTO);
         PageResult page = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(page);
     }
