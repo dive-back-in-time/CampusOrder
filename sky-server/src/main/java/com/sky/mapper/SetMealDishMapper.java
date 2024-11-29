@@ -8,4 +8,6 @@ import java.util.List;
 public interface SetMealDishMapper {
 
     List<Long> getIdById(List<Long> ids);
+
+
 }
