@@ -3,6 +3,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.result.PageResult;
@@ -13,9 +14,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -27,6 +30,9 @@ public class DishController {
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 新增菜品
      * @param dishDTO
@@ -36,6 +42,12 @@ public class DishController {
     @ApiOperation("新增菜品")
     public Result save(@RequestBody DishDTO dishDTO) {
         dishService.saveWithFlavour(dishDTO);
+
+        //清理缓存
+
+
+        redisClean("dish_" + dishDTO.getCategoryId());
+
         return Result.success();
     }
 
@@ -51,6 +63,10 @@ public class DishController {
     public Result delete (@RequestParam List<Long> ids) {
         log.info("菜品批量删除:{}" , ids);
         dishService.deleteBatch(ids);
+
+        //删除id对应的分类缓存，这里简化，直接删除dish_开头的key
+        redisClean("dish_*");
+
         return Result.success();
     }
 
@@ -66,8 +82,41 @@ public class DishController {
     @PutMapping
     @ApiOperation("修改菜品")
     public Result update(@RequestBody DishDTO dishDTO) {
-        log.info("修改菜品：{}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
+
+        //清理缓存
+//        if (dishDTO.getCategoryId() == null) {
+//            String key = "dish_" + dishDTO.getCategoryId();
+//            redisTemplate.delete(key);
+//        }
+        //删除id对应的分类缓存，这里简化，直接删除dish_开头的key
+        redisClean("dish_*");
+
         return Result.success();
+    }
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("菜品起售停售")
+    public Result<String> startOrStop(@PathVariable Integer status, Long id) {
+        dishService.startOrStop(status, id);
+        redisClean("dish_*");
+        return Result.success();
+    }
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    public Result<List<Dish>> list(Long categoryId) {
+        List<Dish> dishList = dishService.list(categoryId);
+        return Result.success(dishList);
+    }
+
+    private void redisClean(String pattern) {
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }

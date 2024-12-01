@@ -28,4 +28,18 @@ public interface DishService {
     void updateWithFlavor(DishDTO dishDTO);
 
     List<DishVO> listWithFlavor(Dish dish);
+
+    /**
+     * 起售、停售菜品
+     * @param status
+     * @param id
+     */
+    void startOrStop(Integer status, Long id);
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    List<Dish> list(Long categoryId);
 }
