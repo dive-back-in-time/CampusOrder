@@ -30,18 +30,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User wxLogin(UserLoginDTO userLoginDTO) {
-        // 调用微信用户接口，获取openid
-        String openid = getOpenid(userLoginDTO);
-
-        // 判断 openid 是否为空，如果为空，抛出异常
-        if (openid == null) {
-            throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
-        }
+//        // 调用微信用户接口，获取openid
+//        String openid = getOpenid(userLoginDTO);
+//
+//        // 判断 openid 是否为空，如果为空，抛出异常
+//        if (openid == null) {
+//            throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
+//        }
         // 是否在用户表中存在，如果不存在为新用户，插入用户表
-        User user = userMapper.getByOpenId(openid);
+
+        //直接插入用户名字
+        User user = userMapper.getByName(userLoginDTO.getUsername());
         if (user == null) {
             user = User.builder()
-                    .openid(openid)
+                    .name(userLoginDTO.getUsername())
                     .createTime(LocalDateTime.now())
                     .build();
         }
@@ -50,16 +52,16 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private String getOpenid(UserLoginDTO userLoginDTO) {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("appid", weChatProperties.getAppid());
-        hashMap.put("secret", weChatProperties.getSecret());
-        hashMap.put("js_code", userLoginDTO.getCode());
-        hashMap.put("grant_type", "authorization_code");
-
-        String json = HttpClientUtil.doGet(URL, hashMap);
-        JSONObject parseJson = JSONObject.parseObject(json);
-        String openid = parseJson.getString("openid");
-        return openid;
-    }
+//    private String getOpenid(UserLoginDTO userLoginDTO) {
+//        HashMap<String, String> hashMap = new HashMap<>();
+//        hashMap.put("appid", weChatProperties.getAppid());
+//        hashMap.put("secret", weChatProperties.getSecret());
+//        hashMap.put("js_code", userLoginDTO.getCode());
+//        hashMap.put("grant_type", "authorization_code");
+//
+//        String json = HttpClientUtil.doGet(URL, hashMap);
+//        JSONObject parseJson = JSONObject.parseObject(json);
+//        String openid = parseJson.getString("openid");
+//        return openid;
+//    }
 }

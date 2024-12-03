@@ -33,7 +33,7 @@ public class UserController {
     private JwtProperties jwtProperties;
 
     @PostMapping("/login")
-    @ApiOperation("微信登录")
+    @ApiOperation("微信登录/普通登录")
     public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO) {
         User user = userService.wxLogin(userLoginDTO);
 
