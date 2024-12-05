@@ -44,4 +44,19 @@ public class OrderDetail implements Serializable {
 
     //图片
     private String image;
+
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", orderId=" + orderId +
+                ", dishId=" + dishId +
+                ", setmealId=" + setmealId +
+                ", dishFlavor='" + dishFlavor + '\'' +
+                ", number=" + number +
+                ", amount=" + amount +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }

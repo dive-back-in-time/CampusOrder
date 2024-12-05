@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserMapper {
 
-    @Select("select * from user where name = #{name}")
-    public User getByName(String name);
+    @Select("select * from user where openid = #{openid}")
+    public User getByOpenId(String openid);
 
     /**
      * 增加用户
