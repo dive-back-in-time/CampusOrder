@@ -44,10 +44,10 @@ public class UserServiceImpl implements UserService {
         }
 
         //直接插入用户名字
-        User user = userMapper.getByOpenId(userLoginDTO.getCode());
+        User user = userMapper.getByOpenId(openid);
         if (user == null) {
             user = User.builder()
-                    .openid(userLoginDTO.getCode())
+                    .openid(openid)
                     .createTime(LocalDateTime.now())
                     .build();
             userMapper.insert(user);
