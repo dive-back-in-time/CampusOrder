@@ -447,7 +447,7 @@ public class OrderServiceImpl implements OrderService {
         Orders ordersDB = orderMapper.getById(id);
 
         // 校验订单是否存在，并且状态为4
-        if (ordersDB == null ) {
+        if (ordersDB == null || ordersDB.getStatus().equals(Orders.COMPLETED)) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 

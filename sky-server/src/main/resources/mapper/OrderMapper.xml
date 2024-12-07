@@ -50,4 +50,12 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="selectTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        select od.name as name, sum(od.number) as number from orders as ora left join order_detail od on ora.id = od.order_id
+        where date(order_time) &gt;= #{begin} and date(order_time) &lt;= #{end}
+        group by od.name
+        order by sum(od.number) desc
+        limit 10
+    </select>
 </mapper>
