@@ -1,6 +1,6 @@
 # lsm-takeout
 ## 介绍
-分布式三高商城系统
+基于Spring Boot + MyBatis + Redis + MySQL 的外卖点餐平台
 
 ## 软件架构
 软件架构说明
